@@ -1,13 +1,13 @@
 let api = {
 	getBio(username) {
-		return formatAndFetchUrl(username);
+		return formatUsernameAndFetchUrl(username);
 	},
 	getRepos(username) {
-		return formatAndFetchUrl(username, 'repos');
+		return formatUsernameAndFetchUrl(username, 'repos');
 	}
 };
 
-let formatAndFetchUrl = (username, urlString = null) => {
+let formatUsernameAndFetchUrl = (username, urlString = null) => {
 	username = username.toLowerCase().trim();
 	let url = `https://api.github.com/users/${username}`;
 

@@ -5,7 +5,7 @@ import {
   StyleSheet,
   TextInput,
   TouchableHighlight,
-  ActivityIndicatorIOS,
+  ActivityIndicator,
 } from 'react-native';
 
 import api from '../utils/api';
@@ -81,13 +81,12 @@ export default class Main extends Component {
 
 		api.getBio(this.state.username)
 			.then( (response) => {
-				if (response.message === 'Not found') {
+				if (response.message && response.message.toLowerCase() === 'not found') {
 					this.setState({
 						isLoading: false,
 						error: 'User not found'
 					});
 				} else {
-					console.log(this.props);
 					this.props.navigator.push({
 						title: response.name || 'Select an option',
 						component: Dashboard,
@@ -117,6 +116,14 @@ export default class Main extends Component {
 					underlayColor="white">
 						<Text style={styles.buttonText}>SEARCH</Text>
 				</TouchableHighlight>
+				<ActivityIndicator
+					animating={this.state.isLoading}
+					color="#111"
+					size="large"
+				/>
+				{ this.state.error &&
+					<Text>{this.state.error}</Text>
+				}
 			</View>
 		);
 	}
