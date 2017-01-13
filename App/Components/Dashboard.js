@@ -7,6 +7,8 @@ import {
 	StyleSheet
 } from 'react-native';
 
+import Profile from './Profile';
+
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
