@@ -80,7 +80,10 @@ export default class Dashboard extends Component{
 					this.props.navigator.push({
 						title: 'Repos',
 						component: Repos,
-						passProps: { userInfo: this.props.userInfo, repos: response }
+						passProps: {
+							userInfo: this.props.userInfo,
+							repos: response
+						}
 					});
 
 					this.setState({

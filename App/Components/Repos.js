@@ -10,6 +10,7 @@ import {
 
 import Badge from './Badge';
 import Separator from './Helpers/Separator';
+import Web from './Helpers/WebView';
 
 const styles = StyleSheet.create({
 	container: {
@@ -40,6 +41,15 @@ export default class Repos extends Component {
 	truncateDescription(description) {
 		return description.length > 100 ? `${description.slice(0, 99)}...` : description;
 	}
+
+	goToWebView(url, name) {
+		this.props.navigator.push({
+			title: name,
+			component: Web,
+			passProps: { url }
+		});
+	}
+
   render() {
 		let repos = _.orderBy(this.props.repos, ['created_at'], ['desc']);
 		let list = repos.map( (repo, index) => {
@@ -48,12 +58,12 @@ export default class Repos extends Component {
 				<View key={index}>
 					<View style={styles.rowContainer}>
 						<TouchableHighlight
-							// onPress={}
+							onPress={this.goToWebView.bind(this, repo.html_url, repo.name)}
 							underlayColor="transparent">
 								<Text style={styles.name}> {repo.name} </Text>
 						</TouchableHighlight>
 						{ repo.stargazers_count > 0 &&
-							<Text style={styles.stars}> {repo.stargazers_count} </Text>
+							<Text style={styles.stars}> Stars: {repo.stargazers_count} </Text>
 						}
 						<Text style={styles.description}> { desc } </Text>
 					</View>
