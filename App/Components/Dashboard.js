@@ -4,10 +4,13 @@ import {
 	View,
 	Image,
 	TouchableHighlight,
-	StyleSheet
+	StyleSheet,
+	ActivityIndicator
 } from 'react-native';
 
 import Profile from './Profile';
+import Repos from './Repos';
+import api from '../utils/api';
 
 const styles = StyleSheet.create({
 	container: {
@@ -26,6 +29,14 @@ const styles = StyleSheet.create({
 });
 
 export default class Dashboard extends Component{
+	constructor() {
+		super();
+		this.state = {
+			isLoading: false,
+			error: false
+		};
+	}
+
 	makeBackground(btn){
 		let bgProps = {
 			flex: 1,
@@ -54,11 +65,30 @@ export default class Dashboard extends Component{
 	}
 
 	goToRepos() {
-		this.props.navigator.push({
-			title: 'Repos',
-			component: Repos,
-			passProps: { userInfo: this.props.userInfo }
+		this.setState({
+			isLoading: true
 		});
+
+		api.getRepos(this.props.userInfo.login)
+			.then( (response) => {
+				if (response.message && response.message.toLowerCase() === 'not found') {
+					this.setState({
+						isLoading: false,
+						error: 'User not found'
+					});
+				} else {
+					this.props.navigator.push({
+						title: 'Repos',
+						component: Repos,
+						passProps: { userInfo: this.props.userInfo, repos: response }
+					});
+
+					this.setState({
+						isLoading: false,
+						error: false
+					});
+				}
+			});
 	}
 
 	goToNotes() {
@@ -92,6 +122,14 @@ export default class Dashboard extends Component{
 					underlayColor="#88D4F5">
 						<Text style={styles.buttonText}> View Notes </Text>
 				</TouchableHighlight>
+				<ActivityIndicator
+					animating={this.state.isLoading}
+					color="#111"
+					size="large"
+				/>
+				{ this.state.error &&
+					<Text>{this.state.error}</Text>
+				}
 			</View>
 		);
 	}

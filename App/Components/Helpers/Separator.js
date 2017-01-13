@@ -4,7 +4,6 @@ import {
   StyleSheet
 } from 'react-native';
 
-
 const styles = StyleSheet.create({
 	separator: {
 		marginLeft: 15,
@@ -13,7 +12,7 @@ const styles = StyleSheet.create({
 	}
 });
 
-export default class Separator extends React.Component {
+export default class Separator extends Component {
   render() {
     return (
       <View style={styles.separator} />
